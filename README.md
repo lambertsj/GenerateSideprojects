@@ -17,7 +17,6 @@ generate ──► normalise ──► kill gates ──► competition check �
    - a gate fails structurally,
    - the only spend is the owner's own time,
    - two or more gates fail,
-   - there is a conflict of interest with your employer,
    - founder fit is weak and the idea does not fit your hours and budget.
 4. **Competition.** Only for survivors, because web search costs money. The check searches in the local language and in English for direct competitors, workarounds, foreign variants and failure traces. An idea is killed by a free competitor with full overlap, or when the check itself concludes "stop".
 
@@ -81,7 +80,7 @@ If you interrupt a run with Ctrl+C, the report is still written.
 | `founder` | country, background, technical skills, domain expertise, network, own frustrations, unfair advantage | Direction for generation; employment rules of your country; gate 4 (can you reach 10 customers?) |
 | `time_and_money` | hours per week, starting budget, currency, months until first revenue | Whether the smallest paid version is feasible |
 | `preferences` | target markets, sales, support, customer type, revenue ceiling, enjoyable and disliked work, avoid | Market choice, daily work in year 2, structural traps |
-| `employer` | sector, excluded categories, side-activity policy | Hard exclusion on conflicts of interest |
+| `employer` | sector, excluded categories, side-activity policy | Conflicts of interest are noted in the founder-fit explanation, not a kill reason |
 | `generation` | output language, custom sectors and data sources | Language of the report; overriding built-in lists |
 
 `founder.country` is required. `preferences.target_markets` defaults to that country. The two are separate on purpose: where you live determines your employment rules and legal setup, while your customers may be elsewhere.

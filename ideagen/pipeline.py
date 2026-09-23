@@ -105,8 +105,6 @@ def gate_kill(res):
     if len(fails) >= 2:
         return "Multiple gates failed: " + "; ".join(f"{g.get('nr')}: {g.get('reason')}" for g in fails)
     ff = res.get("founder_fit", {})
-    if ff.get("conflict_of_interest"):
-        return f"Conflict of interest with employer: {ff.get('explanation')}"
     if ff.get("match") == "weak" and ff.get("fits_hours_and_budget") is False:
         return f"Weak founder fit and does not fit hours/budget: {ff.get('explanation')}"
     return None
