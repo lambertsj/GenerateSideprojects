@@ -64,6 +64,38 @@ python -m ideagen --language Dutch           # override the output language
 python -m ideagen --all                      # report of all previous runs
 ```
 
+All options:
+
+| Option | Default | Effect |
+|---|---|---|
+| `--target N` | `3` | Stop once N ideas have passed every step |
+| `--per-round N` | `6` | Ideas per generation round |
+| `--max-rounds N` | `5` | Upper limit on generation rounds, so a run always ends |
+| `--sector TEXT` | random | Fixed sector for every round instead of a random one |
+| `--market TEXT` | from profile | Fixed target market instead of one from `preferences.target_markets` |
+| `--language TEXT` | from profile | Output language, overrides `generation.output_language` |
+| `--profile PATH` | `profile.toml` | Founder profile to use |
+| `--checklist PATH` | `checklist.md` | Checklist for the evaluation step |
+| `--db PATH` | `data/ideas.db` | SQLite database with every idea and its verdict |
+| `--output DIR` | `output` | Where the markdown reports go |
+| `--all` | off | Only write a report of all previous runs; no API calls |
+
+Examples for the founder in the [example profile](#example-profile) below:
+
+```bash
+# A cheap first run: at most 2 rounds of 4 ideas, stop at 2 candidates
+python -m ideagen --target 2 --per-round 4 --max-rounds 2
+
+# Stay in your own domain and aim at the Belgian market
+python -m ideagen --sector "road transport" --market Belgium
+
+# Same profile, report in Dutch, separate database and output folder for this experiment
+python -m ideagen --language Dutch --db data/transport.db --output output/transport
+
+# Try a second profile side by side
+python -m ideagen --profile profiles/warehousing.toml
+```
+
 Each run writes `output/ideas_<date_time>.md` with:
 
 - **Candidates.** For each one: customer, job, mechanism, target market, a gate table, coverage, feedback latency, founder fit, daily work in year 2, riskiest assumption, cheapest experiment, a field-test plan, and competitors with links.
@@ -83,6 +115,64 @@ If you interrupt a run with Ctrl+C, the report is still written.
 | `employer` | sector, excluded categories, side-activity policy | Conflicts of interest are noted in the founder-fit explanation, not a kill reason |
 | `generation` | output language, custom sectors and data sources | Language of the report; overriding built-in lists |
 
+### Example profile
+
+A complete, consistent example: a Dutch backend developer who works for a logistics software company and wants a small B2B side project. The same profile is in `profile.example.toml`.
+
+```toml
+[founder]
+country = "Netherlands"
+background = "Backend developer, 8 years in logistics software; before that 2 years as a transport planner"
+technical_skills = ["Python", "SQL", "scraping", "LLM integrations"]
+domain_expertise = ["road transport", "warehousing"]
+network = "Can reach ~20 planners and transport company owners directly via former colleagues"
+own_frustrations = [
+    "carriers send delivery confirmations as scanned PDFs that someone retypes",
+    "customs and emission-zone rules change and planners find out after a fine",
+]
+unfair_advantage = "Knows how small carriers actually plan: in Excel and WhatsApp, not in a TMS"
+
+[time_and_money]
+hours_per_week = 8
+starting_budget = 500
+currency = "EUR"
+months_until_first_revenue = 6
+
+[preferences]
+target_markets = ["Netherlands", "Belgium"]
+sales = "limited"          # none | limited | fine
+support = "limited"        # none | limited | fine
+customer_type = "B2B"
+revenue_ceiling = "Solo, max ~10k MRR, no employees"
+enjoyable_work = "Cleaning and analysing data, writing"
+disliked_work = "Cold calling"
+avoid = ["medical data", "two-sided marketplaces", "enterprise sales"]
+
+[employer]
+employer_sector = "Logistics software (TMS vendor for mid-size carriers)"
+excluded = ["the employer's customers", "TMS or route-planning software"]
+side_activity_policy = "Allowed after notifying my manager; no competing activities"
+
+[generation]
+output_language = "English"
+sectors = []
+data_sources = []
+```
+
+Tips for filling it in:
+
+- **Be concrete.** "Can reach ~20 planners via former colleagues" helps the evaluator judge gate 4; "good network" does not.
+- **`own_frustrations` and `unfair_advantage`** steer the generator toward problems you have seen yourself. Leave them empty if you have nothing specific; do not invent them.
+- **`employer`** does not stop ideas. The evaluator flags possible conflicts in the founder-fit explanation, so you can check them against your contract before you start.
+- **`generation.sectors` and `generation.data_sources`** replace the built-in lists. Use them to narrow a run, for example for the founder above:
+
+  ```toml
+  [generation]
+  output_language = "Dutch"
+  sectors = ["road transport", "warehousing", "construction subcontracting"]
+  data_sources = ["RDW open data", "TenderNed / TED", "emails and PDFs in the customer's inbox"]
+  ```
+
 `founder.country` is required. `preferences.target_markets` defaults to that country. The two are separate on purpose: where you live determines your employment rules and legal setup, while your customers may be elsewhere.
 
 `profile.toml` and `.env` are in `.gitignore`. Do not commit them.
@@ -100,6 +190,17 @@ Ideas, evaluations and reasons are written in `generation.output_language`, or i
 | `IDEAGEN_MODEL_EVAL` | `claude-opus-5-5` |
 | `IDEAGEN_MODEL_NORMALIZE` | same as `IDEAGEN_MODEL_GEN` |
 | `IDEAGEN_MAX_SEARCHES` | `8` per competition check |
+
+Example `.env`: only the key is required; the other lines show the defaults.
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-...
+
+IDEAGEN_MODEL_GEN=claude-sonnet-5
+IDEAGEN_MODEL_EVAL=claude-opus-5-5
+IDEAGEN_MODEL_NORMALIZE=claude-sonnet-5
+IDEAGEN_MAX_SEARCHES=8      # lower this, e.g. to 4, to make competition checks cheaper
+```
 
 ## Limitations
 

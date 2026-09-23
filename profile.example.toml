@@ -3,12 +3,15 @@
 
 [founder]
 country = "Netherlands"            # where you live and work: employment rules, tax, legal form
-background = "Backend developer, 8 years in logistics"
+background = "Backend developer, 8 years in logistics software; before that 2 years as a transport planner"
 technical_skills = ["Python", "SQL", "scraping", "LLM integrations"]
 domain_expertise = ["road transport", "warehousing"]   # industries you know from the inside
 network = "Can reach ~20 planners and transport company owners directly via former colleagues"
-own_frustrations = []              # problems you run into in your own work
-unfair_advantage = ""              # data, audience, access, experience
+own_frustrations = [               # problems you run into in your own work
+    "carriers send delivery confirmations as scanned PDFs that someone retypes",
+    "customs and emission-zone rules change and planners find out after a fine",
+]
+unfair_advantage = "Knows how small carriers actually plan: in Excel and WhatsApp, not in a TMS"
 
 [time_and_money]
 hours_per_week = 8
@@ -26,10 +29,10 @@ enjoyable_work = "Cleaning and analysing data, writing"
 disliked_work = "Cold calling"
 avoid = ["medical data", "two-sided marketplaces", "enterprise sales"]
 
-[employer]
-employer_sector = ""
-excluded = []                      # hard exclusion for conflicts of interest: markets, clients, competitors
-side_activity_policy = ""
+[employer]                         # noted in the founder-fit explanation, not a kill reason
+employer_sector = "Logistics software (TMS vendor for mid-size carriers)"
+excluded = ["the employer's customers", "TMS or route-planning software"]   # markets, clients, competitors
+side_activity_policy = "Allowed after notifying my manager; no competing activities"
 
 [generation]
 output_language = "English"        # language of the ideas and the report, e.g. "English", "Dutch", "German"
