@@ -20,6 +20,7 @@ LABELS = {
         "attempts": "Attempts for 10 conversations", "give_up": "Customer must give up",
         "competition": "Competition", "feature_risk": "feature risk", "angle": "Open angle",
         "failure": "Failure trace",
+        "not_checked": "not checked (run with --no-competition). Search for competitors yourself before choosing.",
         "no_weak_point": "No weak point found, even after re-evaluation: distrust this verdict.",
         "prospective_only": "Only prospectively verifiable: the most important fact about this idea.",
     },
@@ -40,6 +41,7 @@ LABELS = {
         "attempts": "Pogingen voor 10 gesprekken", "give_up": "Klant moet afstaan",
         "competition": "Concurrentie", "feature_risk": "feature-risico", "angle": "Open hoek",
         "failure": "Faalspoor",
+        "not_checked": "niet gecontroleerd (run met --no-competition). Zoek zelf naar concurrenten voordat je kiest.",
         "no_weak_point": "Geen enkel zwak punt gevonden, ook na herbeoordeling: wantrouw dit oordeel.",
         "prospective_only": "Alleen prospectief valideerbaar: het belangrijkste feit over dit idee.",
     },
@@ -101,6 +103,11 @@ def _candidate(L, title, idea, gates, comp, warn):
         f"- {L['attempts']}: {_d(f.get('attempts_for_10_conversations'))}",
         f"- {L['give_up']}: {_d(f.get('customer_must_give_up'))}",
         "",
+    ]
+    if not comp:
+        out += [f"**{L['competition']}:** {L['not_checked']}", "\n---\n"]
+        return out
+    out += [
         f"**{L['competition']}:** {_d(c.get('diagnosis'))} · {L['feature_risk']} {_d(c.get('feature_risk'))}  ",
         f"**{L['angle']}:** {_d(c.get('angle'))}\n",
     ]

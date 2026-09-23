@@ -18,7 +18,7 @@ generate ──► normalise ──► kill gates ──► competition check �
    - the only spend is the owner's own time,
    - two or more gates fail,
    - founder fit is weak and the idea does not fit your hours and budget.
-4. **Competition.** Only for survivors, because web search costs money. The check searches in the local language and in English for direct competitors, workarounds, foreign variants and failure traces. An idea is killed by a free competitor with full overlap, or when the check itself concludes "stop".
+4. **Competition.** Only for survivors, because web search costs money. Optional: `--no-competition` skips this step. The check searches in the local language and in English for direct competitors, workarounds, foreign variants and failure traces. An idea is killed by a free competitor with full overlap, or when the check itself concludes "stop".
 
 Every idea goes into `data/ideas.db`, including the killed ones with their reason.
 
@@ -74,6 +74,7 @@ All options:
 | `--sector TEXT` | random | Fixed sector for every round instead of a random one |
 | `--market TEXT` | from profile | Fixed target market instead of one from `preferences.target_markets` |
 | `--language TEXT` | from profile | Output language, overrides `generation.output_language` |
+| `--no-competition` | off | Skip the competition check, the most expensive step; every idea that passes the gates becomes a candidate |
 | `--profile PATH` | `profile.toml` | Founder profile to use |
 | `--checklist PATH` | `checklist.md` | Checklist for the evaluation step |
 | `--db PATH` | `data/ideas.db` | SQLite database with every idea and its verdict |
@@ -85,6 +86,9 @@ Examples for the founder in the [example profile](#example-profile) below:
 ```bash
 # A cheap first run: at most 2 rounds of 4 ideas, stop at 2 candidates
 python -m ideagen --target 2 --per-round 4 --max-rounds 2
+
+# Cheaper still: skip the competition check and search for competitors yourself
+python -m ideagen --target 2 --per-round 4 --max-rounds 2 --no-competition
 
 # Stay in your own domain and aim at the Belgian market
 python -m ideagen --sector "road transport" --market Belgium
@@ -206,7 +210,7 @@ IDEAGEN_MAX_SEARCHES=8      # lower this, e.g. to 4, to make competition checks 
 
 - **A candidate is a hypothesis, not a viable idea.** A model cannot test gate 4 (talking to 10 customers within two weeks) or gate 5 (someone paying upfront for a manual version). Those gates get the status `field_test` with a concrete plan. Only those conversations tell you anything.
 - **Competition can be missed.** The check only sees what web search finds. Spreadsheet and freelance workarounds are often invisible online.
-- **Costs.** Each candidate costs a share of one generation call, one normalisation call, one or two gate calls, and a competition check with up to 8 searches. Start with a small `--target`.
+- **Costs.** Each candidate costs a share of one generation call, one normalisation call, one or two gate calls, and a competition check with up to 8 searches. The competition check is by far the most expensive step: in test runs it cost about $1 per idea, mostly because search results count as input tokens, against about $0.12 for a gate evaluation. Start with a small `--target`, lower `IDEAGEN_MAX_SEARCHES`, or skip the step with `--no-competition`.
 - **Never choose based on one candidate.** Put at least two side by side.
 
 ## Structure

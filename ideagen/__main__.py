@@ -19,6 +19,8 @@ def main():
     ap.add_argument("--checklist", default="checklist.md")
     ap.add_argument("--db", default="data/ideas.db")
     ap.add_argument("--output", default="output")
+    ap.add_argument("--no-competition", action="store_true",
+                    help="skip the competition check (the most expensive step); survivors of the gates become candidates")
     ap.add_argument("--all", action="store_true", help="only write a report of all previous runs")
     args = ap.parse_args()
 
@@ -76,16 +78,17 @@ def main():
                     print(f"  ✗ {title} — {reason[:100]}")
                     continue
 
-                try:
-                    comp = pipeline.check_competition(llm, settings, idea, language)
-                except RuntimeError as e:
-                    print(f"  ! competition check failed: {title}: {e}")
-                    continue
-                store.update(con, rid, competition=comp)
-                if reason := pipeline.competition_kill(comp):
-                    store.update(con, rid, status="killed_competition", kill_reason=reason)
-                    print(f"  ✗ {title} — {reason[:100]}")
-                    continue
+                if not args.no_competition:
+                    try:
+                        comp = pipeline.check_competition(llm, settings, idea, language)
+                    except RuntimeError as e:
+                        print(f"  ! competition check failed: {title}: {e}")
+                        continue
+                    store.update(con, rid, competition=comp)
+                    if reason := pipeline.competition_kill(comp):
+                        store.update(con, rid, status="killed_competition", kill_reason=reason)
+                        print(f"  ✗ {title} — {reason[:100]}")
+                        continue
 
                 store.update(con, rid, status="candidate", warning=pipeline.warning(gates))
                 found += 1
