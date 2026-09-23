@@ -1,0 +1,37 @@
+# Copy to profile.toml and fill in. profile.toml is in .gitignore because it
+# contains information about your employer. Empty fields are skipped.
+
+[founder]
+country = "Netherlands"            # where you live and work: employment rules, tax, legal form
+background = "Backend developer, 8 years in logistics"
+technical_skills = ["Python", "SQL", "scraping", "LLM integrations"]
+domain_expertise = ["road transport", "warehousing"]   # industries you know from the inside
+network = "Can reach ~20 planners and transport company owners directly via former colleagues"
+own_frustrations = []              # problems you run into in your own work
+unfair_advantage = ""              # data, audience, access, experience
+
+[time_and_money]
+hours_per_week = 8
+starting_budget = 500
+currency = "EUR"
+months_until_first_revenue = 6     # how long can you keep going without revenue?
+
+[preferences]
+target_markets = ["Netherlands", "Belgium"]   # where your customers are; empty = founder.country
+sales = "limited"                  # none | limited | fine  (willing to approach customers actively?)
+support = "limited"                # none | limited | fine
+customer_type = "B2B"
+revenue_ceiling = "Solo, max ~10k MRR, no employees"
+enjoyable_work = "Cleaning and analysing data, writing"
+disliked_work = "Cold calling"
+avoid = ["medical data", "two-sided marketplaces", "enterprise sales"]
+
+[employer]
+employer_sector = ""
+excluded = []                      # hard exclusion for conflicts of interest: markets, clients, competitors
+side_activity_policy = ""
+
+[generation]
+output_language = "English"        # language of the ideas and the report, e.g. "English", "Dutch", "German"
+sectors = []                       # empty = built-in list; your domain expertise is weighted in automatically
+data_sources = []                  # empty = built-in list for the target market
